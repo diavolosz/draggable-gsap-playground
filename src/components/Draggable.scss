@@ -17,30 +17,35 @@
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    top: 20%;
+    // top: 8vw;
+    
+    .box-size {
+      position: absolute;
+      // width: 20vw;
+
+      width: 20vw;
+      object-fit: scale-down;
+      object-position: bottom;
+    }
 
     .box {
-      position: absolute;
-      height: 500px;
-      width: 500px;
       z-index: 1;
+      height: 20vw;
     }
 
     .box-cover {
-      position: absolute;
-      // top: -78px;
-      width: 500px;
       z-index: 3;
     }
 
     .dragSticker {
       position: absolute;
-      height: 200px;
-      width: 200px;
+      height: 10vw;
+      width: 10vw;
       object-fit: contain; 
       z-index: 2;
 
-      top: 45%;
+      margin-bottom: 7vw;
+      // top: 63%;
 
       filter: drop-shadow(4px 4px 4px rgb(255, 255, 255));
     }

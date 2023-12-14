@@ -47,21 +47,27 @@ export default function DraggableBlock() {
 
 		Draggable.create(".dragSticker", {
 			inertia: true,
-			resistance: 0,
+			resistance: 5000,
 			bounds: ".draggle-container",
 			onDragStart: function(e) {
 				targetSticker = e.target;
+			},
+			onDragEnd: function() {
+				const box = document.querySelector(".box-cover");
+				const boxRect = box.getBoundingClientRect();
+				const stickerRect = targetSticker.getBoundingClientRect();
+				console.log(stickerRect.bottom >= boxRect.top, stickerRect.bottom, boxRect.top)
+				console.log(stickerRect.bottom <= boxRect.bottom, stickerRect.bottom, boxRect.bottom)
 			},
 			onThrowUpdate: function (e) {
 				const box = document.querySelector(".box-cover");
 				const boxRect = box.getBoundingClientRect();
 				const stickerRect = targetSticker.getBoundingClientRect();
 				if (
-					// Check if the sticker is over the box
-					stickerRect.left >= boxRect.left - 150&&
-					stickerRect.right <= boxRect.right + 150&&
+					stickerRect.left >= (boxRect.left - boxRect.left*0.20)&&
+					stickerRect.right <= (boxRect.right + boxRect.right*0.20)&&
 					stickerRect.bottom >= boxRect.top &&
-					stickerRect.bottom <= boxRect.bottom 
+					stickerRect.bottom <= boxRect.bottom + 50
 				) {
 					gsap.to(targetSticker, { x: 0, y: 0, duration: 0.5 });
 				}
@@ -73,21 +79,13 @@ export default function DraggableBlock() {
 
 
 		let stickerCollectionArr = document.querySelectorAll(".dragSticker")
-
-		// stickerCollectionArr.forEach((sticker) => {
-		// 	gsap.to((sticker), {
-				
-		// 	})
-			
-		// })
-
 	}, [])
 
 	return (
 		<div className="draggle-container">
 			<div className="box-container">
-				<img className="box" src="img/box.png" alt="img/box.png"></img>
-				<img className="box-cover" src="img/box-cover.png" alt="img/box-cover.png"></img>
+				<img className="box box-size" src="img/box.png" alt="img/box.png"></img>
+				<img className="box-cover box-size" src="img/box-cover.png" alt="img/box-cover.png"></img>
 				{expensiveShuffle}	
 			</div>
 		</div>
