@@ -20,26 +20,22 @@ export default function DraggableBlock() {
 	let [examineSticker, setExamineSticker] = useState(null)
 
 
-	let testPrint = (item) => {
-		console.log('triggered', item)
-	}
-
 	let stickerInfoArr = [
-		{imgSrc: "img/stickers/s1.png", imgAlt:"img/stickers/s1.png", title: "sticker title 1", description: "testing description 1: we will put more info here later on"},
-		{imgSrc: "img/stickers/s2.png", imgAlt:"img/stickers/s2.png", title: "sticker title 2", description: "testing description 2: we will put more info here later on"},
-		{imgSrc: "img/stickers/s3.png", imgAlt:"img/stickers/s3.png", title: "sticker title 3", description: "testing description 3: we will put more info here later on"},
-		{imgSrc: "img/stickers/s4.png", imgAlt:"img/stickers/s4.png", title: "sticker title 4", description: "testing description 4: we will put more info here later on"},
-		{imgSrc: "img/stickers/s5.png", imgAlt:"img/stickers/s5.png", title: "sticker title 5", description: "testing description 5: we will put more info here later on"},
-		{imgSrc: "img/stickers/s6.png", imgAlt:"img/stickers/s6.png", title: "sticker title 6", description: "testing description 6: we will put more info here later on"},
-		{imgSrc: "img/stickers/s7.png", imgAlt:"img/stickers/s7.png", title: "sticker title 7", description: "testing description 7: we will put more info here later on"},
-		{imgSrc: "img/stickers/s8.png", imgAlt:"img/stickers/s8.png", title: "sticker title 8", description: "testing description 8: we will put more info here later on"},
+		{imgId: 11,imgSrc: "img/stickers/s1.png", imgAlt:"img/stickers/s1.png", title: "sticker title 1", description: "testing description 1: we will put more info here later on"},
+		{imgId: 12,imgSrc: "img/stickers/s2.png", imgAlt:"img/stickers/s2.png", title: "sticker title 2", description: "testing description 2: we will put more info here later on"},
+		{imgId: 13,imgSrc: "img/stickers/s3.png", imgAlt:"img/stickers/s3.png", title: "sticker title 3", description: "testing description 3: we will put more info here later on"},
+		{imgId: 14,imgSrc: "img/stickers/s4.png", imgAlt:"img/stickers/s4.png", title: "sticker title 4", description: "testing description 4: we will put more info here later on"},
+		{imgId: 15,imgSrc: "img/stickers/s5.png", imgAlt:"img/stickers/s5.png", title: "sticker title 5", description: "testing description 5: we will put more info here later on"},
+		{imgId: 16,imgSrc: "img/stickers/s6.png", imgAlt:"img/stickers/s6.png", title: "sticker title 6", description: "testing description 6: we will put more info here later on"},
+		{imgId: 17,imgSrc: "img/stickers/s7.png", imgAlt:"img/stickers/s7.png", title: "sticker title 7", description: "testing description 7: we will put more info here later on"},
+		{imgId: 18,imgSrc: "img/stickers/s8.png", imgAlt:"img/stickers/s8.png", title: "sticker title 8", description: "testing description 8: we will put more info here later on"},
 	]
 	
 	let expensiveShuffle = useMemo(() => {
 		let stickerCollection = arrayShuffle(stickerInfoArr).map((sticker, index) => {
 			return (
 				<div 
-					id={index}
+					id={sticker.imgId}
 					key={index} 
 					className="sticker-container" 
 				>
@@ -55,6 +51,11 @@ export default function DraggableBlock() {
 	}, [])
 
 
+	let returnImgId = (arr, selectedId) => {
+		for (let img of arr) { if (img.imgId === parseInt(selectedId)) return img }
+	}
+
+
 
 	useEffect(() => {
 
@@ -63,8 +64,7 @@ export default function DraggableBlock() {
 			resistance: 50000,
 			bounds: ".draggle-container",
 			onClick: function(e) {
-				// setExamineSticker(e.target.parentNode.id)
-				setExamineSticker(stickerInfoArr[e.target.parentNode.id])
+				setExamineSticker(returnImgId(stickerInfoArr, e.target.parentNode.id))
 			},
 			onDragStart: function(e) {
 				targetSticker = e.target;
