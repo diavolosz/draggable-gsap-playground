@@ -8,6 +8,7 @@ import arrayShuffle from "../util/arrayShuffle"
 
 import "./Draggable.scss"
 
+import StickerInfo from "./StickerInfo"
 
 gsap.registerPlugin(Draggable, InertiaPlugin)
 
@@ -16,26 +17,38 @@ export default function DraggableBlock() {
 	
 	let targetSticker
 
-	let imageArr = [
-		{src: "img/stickers/s1.png", alt:"img/stickers/s1.png"},
-		{src: "img/stickers/s2.png", alt:"img/stickers/s2.png"},
-		{src: "img/stickers/s3.png", alt:"img/stickers/s3.png"},
-		{src: "img/stickers/s4.png", alt:"img/stickers/s4.png"},
-		{src: "img/stickers/s5.png", alt:"img/stickers/s5.png"},
-		{src: "img/stickers/s6.png", alt:"img/stickers/s6.png"},
-		{src: "img/stickers/s7.png", alt:"img/stickers/s7.png"},
-		{src: "img/stickers/s8.png", alt:"img/stickers/s8.png"},
+	let [examineSticker, setExamineSticker] = useState(null)
+
+
+	let testPrint = (item) => {
+		console.log('triggered', item)
+	}
+
+	let stickerInfoArr = [
+		{imgSrc: "img/stickers/s1.png", imgAlt:"img/stickers/s1.png", title: "sticker title 1", description: "testing description 1: we will put more info here later on"},
+		{imgSrc: "img/stickers/s2.png", imgAlt:"img/stickers/s2.png", title: "sticker title 2", description: "testing description 2: we will put more info here later on"},
+		{imgSrc: "img/stickers/s3.png", imgAlt:"img/stickers/s3.png", title: "sticker title 3", description: "testing description 3: we will put more info here later on"},
+		{imgSrc: "img/stickers/s4.png", imgAlt:"img/stickers/s4.png", title: "sticker title 4", description: "testing description 4: we will put more info here later on"},
+		{imgSrc: "img/stickers/s5.png", imgAlt:"img/stickers/s5.png", title: "sticker title 5", description: "testing description 5: we will put more info here later on"},
+		{imgSrc: "img/stickers/s6.png", imgAlt:"img/stickers/s6.png", title: "sticker title 6", description: "testing description 6: we will put more info here later on"},
+		{imgSrc: "img/stickers/s7.png", imgAlt:"img/stickers/s7.png", title: "sticker title 7", description: "testing description 7: we will put more info here later on"},
+		{imgSrc: "img/stickers/s8.png", imgAlt:"img/stickers/s8.png", title: "sticker title 8", description: "testing description 8: we will put more info here later on"},
 	]
 	
 	let expensiveShuffle = useMemo(() => {
-		let stickerCollection = arrayShuffle(imageArr).map((img, index) => {
+		let stickerCollection = arrayShuffle(stickerInfoArr).map((sticker, index) => {
 			return (
-				<img 
+				<div 
+					id={index}
 					key={index} 
-					className="dragSticker" 
-					src={img.src} 
-					alt={img.alt}>
-				</img>
+					className="sticker-container" 
+				>
+					<img 
+						className="dragSticker" 
+						src={sticker.imgSrc} 
+						alt={sticker.imgAlt}>
+					</img>
+				</div>
 			)
 		})
 		return stickerCollection
@@ -45,19 +58,16 @@ export default function DraggableBlock() {
 
 	useEffect(() => {
 
-		Draggable.create(".dragSticker", {
+		Draggable.create(".sticker-container", {
 			inertia: true,
-			resistance: 5000,
+			resistance: 50000,
 			bounds: ".draggle-container",
+			onClick: function(e) {
+				// setExamineSticker(e.target.parentNode.id)
+				setExamineSticker(stickerInfoArr[e.target.parentNode.id])
+			},
 			onDragStart: function(e) {
 				targetSticker = e.target;
-			},
-			onDragEnd: function() {
-				const box = document.querySelector(".box-cover");
-				const boxRect = box.getBoundingClientRect();
-				const stickerRect = targetSticker.getBoundingClientRect();
-				console.log(stickerRect.bottom >= boxRect.top, stickerRect.bottom, boxRect.top)
-				console.log(stickerRect.bottom <= boxRect.bottom, stickerRect.bottom, boxRect.bottom)
 			},
 			onThrowUpdate: function (e) {
 				const box = document.querySelector(".box-cover");
@@ -68,8 +78,8 @@ export default function DraggableBlock() {
 					stickerRect.right <= (boxRect.right + boxRect.right*0.20)&&
 					stickerRect.bottom >= boxRect.top &&
 					stickerRect.bottom <= boxRect.bottom + 50
-				) {
-					gsap.to(targetSticker, { x: 0, y: 0, duration: 0.5 });
+					) {
+					gsap.to(targetSticker.parentNode, { x: 0, y: 0, duration: 0.5 });
 				}
 			},
 			minimumMovement: 5,
@@ -88,6 +98,16 @@ export default function DraggableBlock() {
 				<img className="box-cover box-size" src="img/box-cover.png" alt="img/box-cover.png"></img>
 				{expensiveShuffle}	
 			</div>
+
+			{examineSticker &&  
+				<StickerInfo
+					setExamineSticker={setExamineSticker}
+					imgSrc={examineSticker.imgSrc}
+					imgAlt={examineSticker.imgAlt}
+					stickerTitle={examineSticker.title}
+					stickerDescription={examineSticker.description}
+				/>
+			}
 		</div>
 	)
 
