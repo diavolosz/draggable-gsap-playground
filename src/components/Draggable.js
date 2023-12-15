@@ -16,6 +16,8 @@ gsap.registerPlugin(Draggable, InertiaPlugin)
 export default function DraggableBlock() {
 	
 	let targetSticker
+	let audioArr = ['audio/peel1.wav', 'audio/peel2.wav']
+
 
 	let [examineSticker, setExamineSticker] = useState(null)
 
@@ -40,7 +42,12 @@ export default function DraggableBlock() {
 					className="sticker-container" 
 				>
 					<img 
-						className="dragSticker" 
+						className="dragSticker front" 
+						src={sticker.imgSrc} 
+						alt={sticker.imgAlt}>
+					</img>
+					<img 
+						className="dragSticker back" 
 						src={sticker.imgSrc} 
 						alt={sticker.imgAlt}>
 					</img>
@@ -57,6 +64,7 @@ export default function DraggableBlock() {
 
 
 
+
 	useEffect(() => {
 
 		Draggable.create(".sticker-container", {
@@ -68,8 +76,23 @@ export default function DraggableBlock() {
 			},
 			onDragStart: function(e) {
 				targetSticker = e.target;
+				let backOfSticker = targetSticker.parentNode.querySelector(".back")
+				let peelTl = gsap.timeline()
+					.to(targetSticker, { marginTop: "-4%", marginLeft: "-5%"}, 0)
+					.to(backOfSticker, { marginTop: "4%", marginLeft: "5%"}, 0)
+				peelTl.play()
+
+				let peelAudio = new Audio(`${arrayShuffle(audioArr)[0]}`)
+				peelAudio.play()
 			},
-			onThrowUpdate: function (e) {
+			onDragEnd: function() {
+				let backOfSticker = targetSticker.parentNode.querySelector(".back")
+				let stickTl = gsap.timeline()
+					.to(targetSticker, { marginTop: 0, marginLeft: 0 }, 0)
+					.to(backOfSticker, { marginTop: 0, marginLeft: 0 }, 0)
+				stickTl.play()
+			},
+			onThrowUpdate: function () {
 				const box = document.querySelector(".box-cover");
 				const boxRect = box.getBoundingClientRect();
 				const stickerRect = targetSticker.getBoundingClientRect();
@@ -87,8 +110,6 @@ export default function DraggableBlock() {
 			force3D: true,
 		})
 
-
-		let stickerCollectionArr = document.querySelectorAll(".dragSticker")
 	}, [])
 
 	return (

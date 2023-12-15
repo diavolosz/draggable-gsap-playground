@@ -40,20 +40,32 @@
     .sticker-container {
       position: absolute;
       z-index: 2;
+      height: 10vw;
+      width: 10vw;
       margin-bottom: 7vw;
+      // overflow: hidden;
       
       .dragSticker {
+        position: absolute;
         height: 10vw;
         width: 10vw;
         object-fit: contain; 
   
         // top: 63%;
   
-        filter: drop-shadow(4px 4px 4px rgb(255, 255, 255));
+        // filter: drop-shadow(4px 4px 4px rgb(255, 255, 255));
+        
+      }
+
+      .back {
+        filter: grayscale(1)
+      }
+
+      .front  {
+        z-index: 5;
       }
     }
 
   }
 
 }
-
